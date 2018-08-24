@@ -8,6 +8,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Piotr Skonieczny
@@ -17,14 +19,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "product")
 public class Product {
     
+    @JsonProperty
     @Id
     private String id;
     
+    @JsonProperty
     @Column(length = 1023)
     private String title;
     
+    @JsonProperty
     private double price;
     
+    @JsonProperty
     @Column(length = 1023)
     private String brand;
     
@@ -34,18 +40,22 @@ public class Product {
     @JoinTable(name = "product_category")
     private List<Category> categories;
     
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "product_also_bought")
     private List<Product> alsoBought;
     
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "product_also_viewed")
     private List<Product> alsoViewed;
     
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "product_bought_together")
     private List<Product> boughtTogether;
     
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "product_buy_after_viewing")
     private List<Product> buyAfterViewing;

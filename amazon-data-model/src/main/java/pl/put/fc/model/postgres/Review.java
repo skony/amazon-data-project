@@ -8,18 +8,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Piotr Skonieczny
  */
+@XmlRootElement
 @Entity
 @Table(name = "review")
 public class Review {
     
+    @JsonProperty
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     
+    @JsonProperty
     @ManyToOne
     @JoinColumn(name = "reviewer_id")
     private Reviewer reviewer;
@@ -28,29 +34,36 @@ public class Review {
     @JoinColumn(name = "product_id")
     private Product product;
     
+    @JsonProperty
     @Column(name = "voted_helpful")
     private int votedHelpful;
     
+    @JsonProperty
     @Column(name = "voted_not_helpful")
     private int votedNotHelpful;
     
+    @JsonProperty
     @Column(name = "review_text", length = 32767)
     private String reviewText;
     
+    @JsonProperty
     private double overall;
     
+    @JsonProperty
     @Column(length = 1023)
     private String summary;
     
+    @JsonProperty
     @Column(name = "review_time")
     private long reviewTime;
     
     public Review() {
     }
     
-    public Review(Reviewer reviewer, Product product, int votedHelpful, int votedNotHelpful, String reviewText, double overall,
+    public Review(long id, Reviewer reviewer, Product product, int votedHelpful, int votedNotHelpful, String reviewText, double overall,
             String summary, long reviewTime) {
-        reviewer = reviewer;
+        this.id = id;
+        this.reviewer = reviewer;
         this.product = product;
         this.votedHelpful = votedHelpful;
         this.votedNotHelpful = votedNotHelpful;
@@ -58,6 +71,11 @@ public class Review {
         this.overall = overall;
         this.summary = summary;
         this.reviewTime = reviewTime;
+    }
+    
+    @JsonGetter("product")
+    public String getProductId() {
+        return product.getId();
     }
     
     public void setReviewer(Reviewer reviewer) {
