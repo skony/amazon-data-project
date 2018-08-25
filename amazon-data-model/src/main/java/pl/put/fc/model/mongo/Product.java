@@ -1,23 +1,31 @@
 package pl.put.fc.model.mongo;
 
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author Piotr Skonieczny
  */
+@XmlRootElement
 @Entity("product")
 public class Product {
     
+    @JsonProperty
     @Id
     private String id;
     
+    @JsonProperty
     private String title;
     
+    @JsonProperty
     private double price;
     
+    @JsonProperty
     private String brand;
     
     // private String description;
@@ -25,15 +33,19 @@ public class Product {
     @Reference
     private List<Category> categories;
     
+    @JsonIgnore
     @Reference
     private List<Product> alsoBought;
     
+    @JsonIgnore
     @Reference
     private List<Product> alsoViewed;
     
+    @JsonIgnore
     @Reference
     private List<Product> boughtTogether;
     
+    @JsonIgnore
     @Reference
     private List<Product> buyAfterViewing;
     

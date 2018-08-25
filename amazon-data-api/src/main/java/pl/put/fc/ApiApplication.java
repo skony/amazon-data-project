@@ -13,7 +13,7 @@ public class ApiApplication {
     
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig()
-                .packages("pl.put.fc.endpoint")
+                .packages("pl.put.fc.api")
                 .register(JacksonFeature.class);
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
     }

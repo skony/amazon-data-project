@@ -1,4 +1,4 @@
-package pl.put.fc.endpoint.postgres;
+package pl.put.fc.api.postgres;
 
 import java.util.ArrayList;
 import java.util.Arrays;
