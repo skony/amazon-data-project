@@ -1,14 +1,42 @@
 package pl.put.fc.model.orient;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.orientechnologies.orient.core.record.ODirection;
+import com.orientechnologies.orient.core.record.OVertex;
+
+@XmlRootElement
 public class Product {
     
-    public static final String ID = "id";
-    public static final String TITLE = "title";
-    public static final String PRICE = "price";
-    public static final String BRAND = "brand";
-    public static final String CATEGORY = "productCategory";
-    public static final String ALSO_VIEWED = "alsoViewed";
-    public static final String ALSO_BOUGHT = "alsoBought";
-    public static final String BOUGHT_TOGETHER = "boughtTogether";
-    public static final String BUY_AFTER_VIEWING = "buyAfterViewing";
+    @JsonProperty
+    private String id;
+    
+    @JsonProperty
+    private String title;
+    
+    @JsonProperty
+    private double price;
+    
+    @JsonProperty
+    private String brand;
+    
+    @JsonProperty
+    private List<Category> categories = new ArrayList<>();
+    
+    public Product() {
+    }
+    
+    public Product(OVertex vertex) {
+        id = vertex.getProperty(ProductDefinition.ID);
+        title = vertex.getProperty(ProductDefinition.TITLE);
+        price = vertex.getProperty(ProductDefinition.PRICE);
+        brand = vertex.getProperty(ProductDefinition.BRAND);
+        vertex.getVertices(ODirection.OUT, ProductDefinition.CATEGORY).forEach(category -> categories.add(new Category(category)));
+    }
+    
+    public String getId() {
+        return id;
+    }
 }
