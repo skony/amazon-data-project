@@ -1,10 +1,7 @@
 package pl.put.fc.api.orient;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.inject.Singleton;
 import javax.ws.rs.DefaultValue;
@@ -18,9 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.db.OrientDB;
 import com.orientechnologies.orient.core.db.OrientDBConfig;
-import com.orientechnologies.orient.core.record.OVertex;
-import com.orientechnologies.orient.core.sql.executor.OResultSet;
-import pl.put.fc.model.orient.CategoryDefinition;
 import pl.put.fc.model.orient.Product;
 import pl.put.fc.model.orient.Review;
 
@@ -53,16 +47,13 @@ public class OrientEndpoint {
     public List<Product> getProductsFromCategory(@DefaultValue("0.0") @QueryParam("minPrice") double minPrice,
             @DefaultValue("0x1.fffffffffffffP+1023") @QueryParam("maxPrice") double maxPrice,
             @PathParam("categoryName") String categoryName) {
-        Optional<OVertex> category = session.query("SELECT FROM Category WHERE name = ?", categoryName).vertexStream().findFirst();
-        if (category.isPresent()) {
-            List<OVertex> categoriesToSearchIn = getDescendantCategories(category.get());
-            OResultSet query =
-                    session.query("SELECT FROM ? UNWIND productCategory WHERE minPrice >= ? AND maxPrice <= ? AND ", categoriesToSearchIn,
-                            minPrice, maxPrice);
-            int x = 1;
-            
-        }
-        return Collections.emptyList();
+        return session.query("SELECT expand(product) FROM (MATCH {class: Category, as:category, where: (name = ?)}" +
+                ".in('parentCategory'){as: child, while: (in('parentCategory').size() > 0)}" +
+                ".in('productCategory'){as:product, where: (price >= ? AND price <= ?)}" +
+                "return product)", categoryName, minPrice, maxPrice)
+                .vertexStream()
+                .map(Product::new)
+                .collect(Collectors.toList());
     }
     
     @GET
@@ -73,12 +64,16 @@ public class OrientEndpoint {
             
         }
         if (StringUtils.isNotBlank(user)) {
-            return session.query("SELECT FROM Review WHERE OUT('reviewReviewer').id = ?", user).vertexStream()
+            return session.query("SELECT expand(review) FROM (" +
+                    "MATCH {class: Reviewer, as: reviewer, where: (id = ?)}" +
+                    ".in('reviewReviewer'){as: review} return review)", user).vertexStream()
                     .map(Review::new)
                     .collect(Collectors.toList());
         }
         if (StringUtils.isNotBlank(product)) {
-            return session.query("SELECT FROM Review WHERE OUT('reviewProduct').id = ?", product).vertexStream()
+            return session.query("SELECT expand(review) FROM (" +
+                    "MATCH {class: Product, as: product, where: (id = ?)}" +
+                    ".in('reviewProduct'){as: review} return review)", product).vertexStream()
                     .map(Review::new)
                     .collect(Collectors.toList());
         }
@@ -90,31 +85,5 @@ public class OrientEndpoint {
         session.close();
         orientDb.close();
         super.finalize();
-    }
-    
-    private List<OVertex> getDescendantCategories(OVertex category) {
-        List<OVertex> parentCategories = Arrays.asList(category);
-        List<OVertex> descendantCategories = new ArrayList<>(Arrays.asList(category));
-        while (true) {
-            List<OVertex> childCategories = getChildCategories(parentCategories);
-            if (childCategories.isEmpty()) {
-                break;
-            }
-            descendantCategories.addAll(childCategories);
-            parentCategories = childCategories;
-        }
-        return descendantCategories;
-    }
-    
-    private List<OVertex> getChildCategories(List<OVertex> parentCategories) {
-        List<OVertex> childCategories = new ArrayList<>();
-        parentCategories.forEach(parentCategory -> childCategories.addAll(getChildCategories(parentCategory)));
-        return childCategories;
-    }
-    
-    private List<OVertex> getChildCategories(OVertex parentCategory) {
-        String parentCategoryName = parentCategory.getProperty(CategoryDefinition.NAME);
-        return session.query("SELECT FROM Category WHERE OUT('parentCategory') = ?", parentCategory.getIdentity().toString()).vertexStream()
-                .collect(Collectors.toList());
     }
 }
