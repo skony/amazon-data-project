@@ -47,7 +47,7 @@ public class OrientEndpoint {
     public List<Product> getProductsFromCategory(@DefaultValue("0.0") @QueryParam("minPrice") double minPrice,
             @DefaultValue("0x1.fffffffffffffP+1023") @QueryParam("maxPrice") double maxPrice,
             @PathParam("categoryName") String categoryName) {
-        return session.query("SELECT expand(product) FROM (MATCH {class: Category, as:category, where: (name = ?)}" +
+        return session.query("SELECT DISTINCT expand(product) FROM (MATCH {class: Category, as:category, where: (name = ?)}" +
                 ".in('parentCategory'){as: child, while: (in('parentCategory').size() > 0)}" +
                 ".in('productCategory'){as:product, where: (price >= ? AND price <= ?)}" +
                 "return product)", categoryName, minPrice, maxPrice)
