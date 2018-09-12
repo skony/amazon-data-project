@@ -64,4 +64,14 @@ public class OrientReviewDataLoader extends AbstractReviewDataLoader {
     public void endTransaction() {
         session.commit();
     }
+    
+    @Override
+    public int getNumberOfInsertsPerEntityTransaction() {
+        return 0;
+    }
+    
+    @Override
+    public int getNumberOfInsertsPerRelationTransaction() {
+        return 0;
+    }
 }

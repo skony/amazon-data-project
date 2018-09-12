@@ -58,4 +58,13 @@ public class Neo4JReviewDataLoader extends AbstractReviewDataLoader {
         session.getTransaction().commit();
     }
     
+    @Override
+    public int getNumberOfInsertsPerEntityTransaction() {
+        return 0;
+    }
+    
+    @Override
+    public int getNumberOfInsertsPerRelationTransaction() {
+        return 0;
+    }
 }

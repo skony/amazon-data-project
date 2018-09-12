@@ -59,4 +59,14 @@ public class PostgresReviewDataLoader extends AbstractReviewDataLoader {
     public void endTransaction() {
         transaction.commit();
     }
+    
+    @Override
+    public int getNumberOfInsertsPerEntityTransaction() {
+        return 10000;
+    }
+    
+    @Override
+    public int getNumberOfInsertsPerRelationTransaction() {
+        return 5000;
+    }
 }

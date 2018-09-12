@@ -63,6 +63,16 @@ public class OrientMetaDataLoader extends AbstractMetaDataLoader {
         session.commit();
     }
     
+    @Override
+    public int getNumberOfInsertsPerEntityTransaction() {
+        return 0;
+    }
+    
+    @Override
+    public int getNumberOfInsertsPerRelationTransaction() {
+        return 0;
+    }
+    
     private void insertCategoryStack(List<OVertex> categories, CategoryStack stack) {
         ListIterator<String> listIterator = stack.getCategories().listIterator();
         OVertex lastCategory = null;

@@ -59,6 +59,16 @@ public class PostgresMetaDataLoader extends AbstractMetaDataLoader {
         transaction.commit();
     }
     
+    @Override
+    public int getNumberOfInsertsPerEntityTransaction() {
+        return 10000;
+    }
+    
+    @Override
+    public int getNumberOfInsertsPerRelationTransaction() {
+        return 5000;
+    }
+    
     private void insertCategoryStack(List<Category> categories, CategoryStack stack) {
         ListIterator<String> listIterator = stack.getCategories().listIterator();
         Category lastCategory = null;

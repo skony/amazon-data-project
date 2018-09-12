@@ -55,4 +55,14 @@ public class MongoReviewDataLoader extends AbstractReviewDataLoader {
     @Override
     public void endTransaction() {
     }
+    
+    @Override
+    public int getNumberOfInsertsPerEntityTransaction() {
+        return 0;
+    }
+    
+    @Override
+    public int getNumberOfInsertsPerRelationTransaction() {
+        return 0;
+    }
 }

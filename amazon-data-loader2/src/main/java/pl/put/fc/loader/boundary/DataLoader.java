@@ -11,4 +11,8 @@ public interface DataLoader {
     void beginTransaction();
     
     void endTransaction();
+    
+    int getNumberOfInsertsPerEntityTransaction();
+    
+    int getNumberOfInsertsPerRelationTransaction();
 }

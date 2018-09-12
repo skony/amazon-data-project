@@ -55,6 +55,16 @@ public class MongoMetaDataLoader extends AbstractMetaDataLoader {
     public void endTransaction() {
     }
     
+    @Override
+    public int getNumberOfInsertsPerEntityTransaction() {
+        return 0;
+    }
+    
+    @Override
+    public int getNumberOfInsertsPerRelationTransaction() {
+        return 0;
+    }
+    
     private void insertCategoryStack(List<Category> categories, CategoryStack stack) {
         ListIterator<String> listIterator = stack.getCategories().listIterator();
         Category lastCategory = null;
