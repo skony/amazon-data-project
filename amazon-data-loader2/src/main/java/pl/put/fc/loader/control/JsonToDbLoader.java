@@ -1,4 +1,4 @@
-package pl.put.fc;
+package pl.put.fc.loader.control;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,11 +30,11 @@ public class JsonToDbLoader {
         while (parser.nextToken() != null) {
             System.out.println("e " + i);
             JsonNode node = objectMapper.readTree(parser);
-            if ((i++ % 100) != 0) {
-                continue;
-            }
+            // if ((i++ % 100) != 0) {
+            // continue;
+            // }
             dataLoader.loadEntitiesToDb(node);
-            if ((i++ % 10000) == 0) {
+            if ((i++ % 100) == 0) {
                 dataLoader.endTransaction();
                 dataLoader.beginTransaction();
             }
@@ -50,11 +50,11 @@ public class JsonToDbLoader {
         while (parser.nextToken() != null) {
             System.out.println("r " + i);
             JsonNode node = objectMapper.readTree(parser);
-            if ((i++ % 100) != 0) {
-                continue;
-            }
+            // if ((i++ % 100) != 0) {
+            // continue;
+            // }
             dataLoader.loadRelationsToDb(node);
-            if ((i++ % 10000) == 0) {
+            if ((i++ % 50) == 0) {
                 dataLoader.endTransaction();
                 dataLoader.beginTransaction();
             }

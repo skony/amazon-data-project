@@ -5,9 +5,9 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.MongoClient;
-import pl.put.fc.DataFile;
-import pl.put.fc.JsonToDbLoader;
+import pl.put.fc.file.DataFile;
 import pl.put.fc.loader.boundary.DataLoadInvoker;
+import pl.put.fc.loader.control.JsonToDbLoader;
 
 public class MongoDataLoadInvoker implements DataLoadInvoker {
     
@@ -31,6 +31,5 @@ public class MongoDataLoadInvoker implements DataLoadInvoker {
     
     @Override
     public void close() {
-        
     }
 }

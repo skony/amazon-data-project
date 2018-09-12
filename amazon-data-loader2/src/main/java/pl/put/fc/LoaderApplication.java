@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import pl.put.fc.file.DataFile;
+import pl.put.fc.fixer.MetaFileFixer;
 import pl.put.fc.loader.control.mongo.MongoDataLoadInvoker;
 import pl.put.fc.loader.control.neo4j.Neo4JDataLoadInvoker;
 import pl.put.fc.loader.control.orient.OrientDataLoadInvoker;
 import pl.put.fc.loader.control.postgres.PostgresDataLoadInvoker;
 
-public class Main {
+public class LoaderApplication {
     
     private static final List<DataFile> DATA_FILES = Arrays.asList(DataFile.MUSICAL_INSTRUMENTS);
     private static PostgresDataLoadInvoker postgresDataLoadInvoker = new PostgresDataLoadInvoker();
@@ -29,6 +31,7 @@ public class Main {
             e.printStackTrace();
         } finally {
             // postgresDataLoadInvoker.close();
+            // mongoDataLoadInvoker.close();
             // orientDataLoadInvoker.close();
             neo4jDataLoadInvoker.close();
         }

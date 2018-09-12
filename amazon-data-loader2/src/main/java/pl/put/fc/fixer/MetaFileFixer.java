@@ -1,4 +1,4 @@
-package pl.put.fc;
+package pl.put.fc.fixer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

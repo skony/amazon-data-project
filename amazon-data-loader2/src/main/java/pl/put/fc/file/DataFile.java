@@ -1,4 +1,4 @@
-package pl.put.fc;
+package pl.put.fc.file;
 
 public enum DataFile {
     

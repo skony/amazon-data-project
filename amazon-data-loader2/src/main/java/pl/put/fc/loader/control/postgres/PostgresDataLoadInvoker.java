@@ -5,9 +5,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import pl.put.fc.DataFile;
-import pl.put.fc.JsonToDbLoader;
+import pl.put.fc.file.DataFile;
 import pl.put.fc.loader.boundary.DataLoadInvoker;
+import pl.put.fc.loader.control.JsonToDbLoader;
 
 public class PostgresDataLoadInvoker implements DataLoadInvoker {
     

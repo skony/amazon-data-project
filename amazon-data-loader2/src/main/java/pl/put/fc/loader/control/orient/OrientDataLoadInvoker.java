@@ -5,13 +5,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.orientechnologies.orient.core.db.ODatabaseSession;
 import com.orientechnologies.orient.core.db.OrientDB;
 import com.orientechnologies.orient.core.db.OrientDBConfig;
-import pl.put.fc.DataFile;
-import pl.put.fc.JsonToDbLoader;
+import pl.put.fc.file.DataFile;
 import pl.put.fc.loader.boundary.DataLoadInvoker;
-import pl.put.fc.model.orient.Category;
-import pl.put.fc.model.orient.Product;
-import pl.put.fc.model.orient.Review;
-import pl.put.fc.model.orient.Reviewer;
+import pl.put.fc.loader.control.JsonToDbLoader;
+import pl.put.fc.model.orient.CategoryDefinition;
+import pl.put.fc.model.orient.ProductDefinition;
+import pl.put.fc.model.orient.ReviewDefinition;
+import pl.put.fc.model.orient.ReviewerDefinition;
 
 public class OrientDataLoadInvoker implements DataLoadInvoker {
     
@@ -22,18 +22,18 @@ public class OrientDataLoadInvoker implements DataLoadInvoker {
     public void init() {
         orientDb = new OrientDB("remote:localhost/amazondb", "root", "root", OrientDBConfig.defaultConfig());
         session = orientDb.open("amazondb", "root", "root");
-        createVertexClass(Product.class.getSimpleName());
-        createVertexClass(Category.class.getSimpleName());
-        createVertexClass(Review.class.getSimpleName());
-        createVertexClass(Reviewer.class.getSimpleName());
-        createEdgeClass(Product.CATEGORY);
-        createEdgeClass(Category.PARENT_CATEGORY);
-        createEdgeClass(Product.ALSO_BOUGHT);
-        createEdgeClass(Product.ALSO_VIEWED);
-        createEdgeClass(Product.BOUGHT_TOGETHER);
-        createEdgeClass(Product.BUY_AFTER_VIEWING);
-        createEdgeClass(Review.PRODUCT);
-        createEdgeClass(Review.REVIEWER);
+        createVertexClass(ProductDefinition.class.getSimpleName());
+        createVertexClass(CategoryDefinition.class.getSimpleName());
+        createVertexClass(ReviewDefinition.class.getSimpleName());
+        createVertexClass(ReviewerDefinition.class.getSimpleName());
+        createEdgeClass(ProductDefinition.CATEGORY);
+        createEdgeClass(CategoryDefinition.PARENT_CATEGORY);
+        createEdgeClass(ProductDefinition.ALSO_BOUGHT);
+        createEdgeClass(ProductDefinition.ALSO_VIEWED);
+        createEdgeClass(ProductDefinition.BOUGHT_TOGETHER);
+        createEdgeClass(ProductDefinition.BUY_AFTER_VIEWING);
+        createEdgeClass(ReviewDefinition.PRODUCT);
+        createEdgeClass(ReviewDefinition.REVIEWER);
     }
     
     @Override
