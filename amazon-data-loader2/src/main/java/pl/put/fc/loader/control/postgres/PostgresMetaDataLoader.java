@@ -61,12 +61,17 @@ public class PostgresMetaDataLoader extends AbstractMetaDataLoader {
     
     @Override
     public int getNumberOfInsertsPerEntityTransaction() {
-        return 10000;
+        return 2500;
     }
     
     @Override
     public int getNumberOfInsertsPerRelationTransaction() {
-        return 5000;
+        return 1250;
+    }
+    
+    @Override
+    public boolean isMeta() {
+        return true;
     }
     
     private void insertCategoryStack(List<Category> categories, CategoryStack stack) {

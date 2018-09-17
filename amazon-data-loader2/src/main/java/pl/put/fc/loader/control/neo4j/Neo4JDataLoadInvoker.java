@@ -25,7 +25,7 @@ public class Neo4JDataLoadInvoker implements DataLoadInvoker {
     @Override
     public void invoke(DataFile dataFile) throws JsonProcessingException, IOException {
         JsonToDbLoader jsonToDbLoader = new JsonToDbLoader();
-        // jsonToDbLoader.load(dataFile.getFixedMetaFile(), new Neo4JMetaDataLoader(session));
+        jsonToDbLoader.load(dataFile.getFixedMetaFile(), new Neo4JMetaDataLoader(session));
         jsonToDbLoader.load(dataFile.getReviewFile(), new Neo4JReviewDataLoader(session));
     }
     

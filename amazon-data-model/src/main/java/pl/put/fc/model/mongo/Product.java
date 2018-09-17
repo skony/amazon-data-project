@@ -30,23 +30,23 @@ public class Product {
     
     // private String description;
     
-    @Reference
+    @Reference(idOnly = true)
     private List<Category> categories;
     
     @JsonIgnore
-    @Reference
+    @Reference(idOnly = true, lazy = true)
     private List<Product> alsoBought;
     
     @JsonIgnore
-    @Reference
+    @Reference(idOnly = true, lazy = true)
     private List<Product> alsoViewed;
     
     @JsonIgnore
-    @Reference
+    @Reference(idOnly = true, lazy = true)
     private List<Product> boughtTogether;
     
     @JsonIgnore
-    @Reference
+    @Reference(idOnly = true, lazy = true)
     private List<Product> buyAfterViewing;
     
     public Product() {

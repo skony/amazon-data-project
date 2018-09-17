@@ -12,29 +12,32 @@ import pl.put.fc.loader.boundary.DataLoader;
 public class JsonToDbLoader {
     
     public void load(String fileName, DataLoader dataLoader) throws JsonProcessingException, IOException {
-        long startTime = System.currentTimeMillis();
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         objectMapper.configure(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER, true);
         URL fileURL = getClass().getClassLoader().getResource(fileName);
+        long startTime = System.currentTimeMillis();
         loadEntities(dataLoader, objectMapper, fileURL);
-        loadRelations(dataLoader, objectMapper, fileURL);
-        System.out.println(System.currentTimeMillis() - startTime);
+        if (dataLoader.isMeta()) {
+            loadRelations(dataLoader, objectMapper, fileURL);
+        }
+        System.out.println(dataLoader.getClass().getSimpleName() + ": " + (System.currentTimeMillis() - startTime));
     }
     
     private void loadEntities(DataLoader dataLoader, ObjectMapper objectMapper, URL fileURL)
             throws IOException, JsonParseException, JsonProcessingException {
         JsonParser parser = objectMapper.getFactory().createParser(fileURL);
         int i = 1;
+        final int transactionSize = dataLoader.getNumberOfInsertsPerEntityTransaction();
         dataLoader.beginTransaction();
         while (parser.nextToken() != null) {
-            System.out.println("e " + i);
+            if (dataLoader.isMeta() && (i > 10000)) {
+                break;
+            }
+            // System.out.println("e " + i);
             JsonNode node = objectMapper.readTree(parser);
-            // if ((i++ % 100) != 0) {
-            // continue;
-            // }
             dataLoader.loadEntitiesToDb(node);
-            if ((i++ % 100) == 0) {
+            if ((i++ % transactionSize) == 0) {
                 dataLoader.endTransaction();
                 dataLoader.beginTransaction();
             }
@@ -46,15 +49,16 @@ public class JsonToDbLoader {
             throws IOException, JsonParseException, JsonProcessingException {
         JsonParser parser = objectMapper.getFactory().createParser(fileURL);
         int i = 1;
+        final int transactionSize = dataLoader.getNumberOfInsertsPerRelationTransaction();
         dataLoader.beginTransaction();
         while (parser.nextToken() != null) {
-            System.out.println("r " + i);
+            // System.out.println("r " + i);
+            if (i > 10000) {
+                break;
+            }
             JsonNode node = objectMapper.readTree(parser);
-            // if ((i++ % 100) != 0) {
-            // continue;
-            // }
             dataLoader.loadRelationsToDb(node);
-            if ((i++ % 50) == 0) {
+            if ((i++ % transactionSize) == 0) {
                 dataLoader.endTransaction();
                 dataLoader.beginTransaction();
             }

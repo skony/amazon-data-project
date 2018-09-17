@@ -6,35 +6,20 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import pl.put.fc.file.DataFile;
 import pl.put.fc.fixer.MetaFileFixer;
+import pl.put.fc.loader.boundary.DataLoadInvoker;
 import pl.put.fc.loader.control.mongo.MongoDataLoadInvoker;
-import pl.put.fc.loader.control.neo4j.Neo4JDataLoadInvoker;
-import pl.put.fc.loader.control.orient.OrientDataLoadInvoker;
-import pl.put.fc.loader.control.postgres.PostgresDataLoadInvoker;
 
 public class LoaderApplication {
     
     private static final List<DataFile> DATA_FILES = Arrays.asList(DataFile.MUSICAL_INSTRUMENTS);
-    private static PostgresDataLoadInvoker postgresDataLoadInvoker = new PostgresDataLoadInvoker();
-    private static MongoDataLoadInvoker mongoDataLoadInvoker = new MongoDataLoadInvoker();
-    private static OrientDataLoadInvoker orientDataLoadInvoker = new OrientDataLoadInvoker();
-    private static Neo4JDataLoadInvoker neo4jDataLoadInvoker = new Neo4JDataLoadInvoker();
+    private static final List<DataLoadInvoker> DATA_LOAD_INVOKERS =
+            // Arrays.asList(new PostgresDataLoadInvoker(), new MongoDataLoadInvoker(), new OrientDataLoadInvoker(),
+            // new Neo4JDataLoadInvoker());
+            Arrays.asList(new MongoDataLoadInvoker());
     
     public static void main(String[] args) throws JsonProcessingException, IOException {
-        // postgresDataLoadInvoker.init();
-        // mongoDataLoadInvoker.init();
-        // orientDataLoadInvoker.init();
-        neo4jDataLoadInvoker.init();
         MetaFileFixer metaFileFixer = new MetaFileFixer();
-        try {
-            DATA_FILES.forEach(file -> proceedFile(metaFileFixer, file));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // postgresDataLoadInvoker.close();
-            // mongoDataLoadInvoker.close();
-            // orientDataLoadInvoker.close();
-            neo4jDataLoadInvoker.close();
-        }
+        DATA_FILES.forEach(file -> proceedFile(metaFileFixer, file));
     }
     
     private static void proceedFile(MetaFileFixer metaFileFixer, DataFile file) {
@@ -42,12 +27,20 @@ public class LoaderApplication {
             if (!metaFileFixer.isAlreadyFixed(file.getFixedMetaFile())) {
                 metaFileFixer.fix(file.getOriginalMetaFile());
             }
-            // postgresDataLoadInvoker.invoke(file);
-            // mongoDataLoadInvoker.invoke(file);
-            // orientDataLoadInvoker.invoke(file);
-            neo4jDataLoadInvoker.invoke(file);
+            DATA_LOAD_INVOKERS.forEach(invoker -> preceedFile(invoker, file));
         } catch (IOException exception) {
             exception.printStackTrace();
+        }
+    }
+    
+    private static void preceedFile(DataLoadInvoker invoker, DataFile file) {
+        try {
+            invoker.init();
+            invoker.invoke(file);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } finally {
+            invoker.close();
         }
     }
 }

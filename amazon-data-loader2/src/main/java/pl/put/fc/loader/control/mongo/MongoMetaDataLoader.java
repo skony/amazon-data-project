@@ -57,12 +57,12 @@ public class MongoMetaDataLoader extends AbstractMetaDataLoader {
     
     @Override
     public int getNumberOfInsertsPerEntityTransaction() {
-        return 0;
+        return 5000;
     }
     
     @Override
     public int getNumberOfInsertsPerRelationTransaction() {
-        return 0;
+        return 5000;
     }
     
     private void insertCategoryStack(List<Category> categories, CategoryStack stack) {
@@ -107,5 +107,10 @@ public class MongoMetaDataLoader extends AbstractMetaDataLoader {
         if (relatedProduct != null) {
             relatedProducts.add(relatedProduct);
         }
+    }
+    
+    @Override
+    public boolean isMeta() {
+        return true;
     }
 }

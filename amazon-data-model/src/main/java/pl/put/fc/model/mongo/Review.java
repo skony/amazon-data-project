@@ -21,10 +21,10 @@ public class Review {
     private ObjectId id;
     
     @JsonProperty
-    @Reference
+    @Reference(idOnly = true)
     private Reviewer reviewer;
     
-    @Reference
+    @Reference(idOnly = true)
     private Product product;
     
     @JsonProperty

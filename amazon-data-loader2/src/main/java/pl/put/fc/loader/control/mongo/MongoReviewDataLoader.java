@@ -58,11 +58,16 @@ public class MongoReviewDataLoader extends AbstractReviewDataLoader {
     
     @Override
     public int getNumberOfInsertsPerEntityTransaction() {
-        return 0;
+        return 5000;
     }
     
     @Override
     public int getNumberOfInsertsPerRelationTransaction() {
-        return 0;
+        return 5000;
+    }
+    
+    @Override
+    public boolean isMeta() {
+        return false;
     }
 }

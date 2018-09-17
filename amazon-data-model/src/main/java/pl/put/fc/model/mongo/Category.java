@@ -12,7 +12,7 @@ public class Category {
     @Id
     public String name;
     
-    @Reference("parent_category_name")
+    @Reference(value = "parent_category_name", idOnly = true)
     public Category parentCategory;
     
     public Category() {

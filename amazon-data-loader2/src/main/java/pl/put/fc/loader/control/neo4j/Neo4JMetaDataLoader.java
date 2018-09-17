@@ -59,12 +59,17 @@ public class Neo4JMetaDataLoader extends AbstractMetaDataLoader {
     
     @Override
     public int getNumberOfInsertsPerEntityTransaction() {
-        return 0;
+        return 25;
     }
     
     @Override
     public int getNumberOfInsertsPerRelationTransaction() {
-        return 0;
+        return 15;
+    }
+    
+    @Override
+    public boolean isMeta() {
+        return true;
     }
     
     private void insertCategoryStack(List<Category> categories, CategoryStack stack) {

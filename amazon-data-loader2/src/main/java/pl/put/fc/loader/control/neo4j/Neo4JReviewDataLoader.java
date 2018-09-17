@@ -60,11 +60,16 @@ public class Neo4JReviewDataLoader extends AbstractReviewDataLoader {
     
     @Override
     public int getNumberOfInsertsPerEntityTransaction() {
-        return 0;
+        return 25;
     }
     
     @Override
     public int getNumberOfInsertsPerRelationTransaction() {
-        return 0;
+        return Integer.MAX_VALUE;
+    }
+    
+    @Override
+    public boolean isMeta() {
+        return false;
     }
 }

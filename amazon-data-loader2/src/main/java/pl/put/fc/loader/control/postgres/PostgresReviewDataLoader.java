@@ -62,11 +62,16 @@ public class PostgresReviewDataLoader extends AbstractReviewDataLoader {
     
     @Override
     public int getNumberOfInsertsPerEntityTransaction() {
-        return 10000;
+        return 2500;
     }
     
     @Override
     public int getNumberOfInsertsPerRelationTransaction() {
-        return 5000;
+        return Integer.MAX_VALUE;
+    }
+    
+    @Override
+    public boolean isMeta() {
+        return false;
     }
 }

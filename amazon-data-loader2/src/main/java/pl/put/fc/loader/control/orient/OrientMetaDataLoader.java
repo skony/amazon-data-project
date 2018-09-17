@@ -10,8 +10,8 @@ import com.orientechnologies.orient.core.sql.executor.OResultSet;
 import pl.put.fc.datamodel.CategoryStack;
 import pl.put.fc.datamodel.MetaDataRow;
 import pl.put.fc.loader.boundary.AbstractMetaDataLoader;
-import pl.put.fc.model.orient.CategoryDefinition;
-import pl.put.fc.model.orient.ProductDefinition;
+import pl.put.fc.model.orient.Category;
+import pl.put.fc.model.orient.Product;
 
 public class OrientMetaDataLoader extends AbstractMetaDataLoader {
     
@@ -27,17 +27,17 @@ public class OrientMetaDataLoader extends AbstractMetaDataLoader {
     @Override
     public void loadEntitiesToDb(JsonNode node) {
         MetaDataRow dataRow = getRow(node);
-        OVertex product = session.newVertex(ProductDefinition.class.getSimpleName());
+        OVertex product = session.newVertex(Product.class.getSimpleName());
         
-        product.setProperty(ProductDefinition.ID, dataRow.getProductId());
-        product.setProperty(ProductDefinition.TITLE, dataRow.getTitle());
-        product.setProperty(ProductDefinition.BRAND, dataRow.getBrand());
-        product.setProperty(ProductDefinition.PRICE, dataRow.getPrice());
+        product.setProperty(Product.ID, dataRow.getProductId());
+        product.setProperty(Product.TITLE, dataRow.getTitle());
+        product.setProperty(Product.BRAND, dataRow.getBrand());
+        product.setProperty(Product.PRICE, dataRow.getPrice());
         
         List<OVertex> categories = new ArrayList<>();
         List<CategoryStack> categoriesStacks = dataRow.getCategories();
         categoriesStacks.forEach(stack -> insertCategoryStack(categories, stack));
-        categories.forEach(category -> product.addEdge(category, ProductDefinition.CATEGORY));
+        categories.forEach(category -> product.addEdge(category, Product.CATEGORY));
         
         product.save();
     }
@@ -46,10 +46,10 @@ public class OrientMetaDataLoader extends AbstractMetaDataLoader {
     public void loadRelationsToDb(JsonNode node) {
         MetaDataRow dataRow = getRow(node);
         OVertex product = session.query(QUERY_PRODUCT, dataRow.getProductId()).next().getVertex().get();
-        getRelatedProducts(dataRow.getAlsoViewed()).forEach(related -> product.addEdge(related, ProductDefinition.ALSO_VIEWED));
-        getRelatedProducts(dataRow.getAlsoBought()).forEach(related -> product.addEdge(related, ProductDefinition.ALSO_BOUGHT));
-        getRelatedProducts(dataRow.getBoughtTogether()).forEach(related -> product.addEdge(related, ProductDefinition.BOUGHT_TOGETHER));
-        getRelatedProducts(dataRow.getBuyAfterViewing()).forEach(related -> product.addEdge(related, ProductDefinition.BUY_AFTER_VIEWING));
+        getRelatedProducts(dataRow.getAlsoViewed()).forEach(related -> product.addEdge(related, Product.ALSO_VIEWED));
+        getRelatedProducts(dataRow.getAlsoBought()).forEach(related -> product.addEdge(related, Product.ALSO_BOUGHT));
+        getRelatedProducts(dataRow.getBoughtTogether()).forEach(related -> product.addEdge(related, Product.BOUGHT_TOGETHER));
+        getRelatedProducts(dataRow.getBuyAfterViewing()).forEach(related -> product.addEdge(related, Product.BUY_AFTER_VIEWING));
         session.save(product);
     }
     
@@ -65,12 +65,17 @@ public class OrientMetaDataLoader extends AbstractMetaDataLoader {
     
     @Override
     public int getNumberOfInsertsPerEntityTransaction() {
-        return 0;
+        return 25;
     }
     
     @Override
     public int getNumberOfInsertsPerRelationTransaction() {
-        return 0;
+        return 15;
+    }
+    
+    @Override
+    public boolean isMeta() {
+        return true;
     }
     
     private void insertCategoryStack(List<OVertex> categories, CategoryStack stack) {
@@ -99,9 +104,9 @@ public class OrientMetaDataLoader extends AbstractMetaDataLoader {
         if (queryResult.hasNext()) {
             return queryResult.next().getVertex().get();
         }
-        OVertex category = session.newVertex(CategoryDefinition.class.getSimpleName());
-        category.setProperty(CategoryDefinition.NAME, categoryName);
-        category.addEdge(parentCategory, CategoryDefinition.PARENT_CATEGORY);
+        OVertex category = session.newVertex(Category.class.getSimpleName());
+        category.setProperty(Category.NAME, categoryName);
+        category.addEdge(parentCategory, Category.PARENT_CATEGORY);
         category.save();
         return category;
     }
@@ -112,8 +117,8 @@ public class OrientMetaDataLoader extends AbstractMetaDataLoader {
         if (queryResult.hasNext()) {
             return queryResult.next().getVertex().get();
         }
-        OVertex category = session.newVertex(CategoryDefinition.class.getSimpleName());
-        category.setProperty(CategoryDefinition.NAME, categoryName);
+        OVertex category = session.newVertex(Category.class.getSimpleName());
+        category.setProperty(Category.NAME, categoryName);
         category.save();
         return category;
     }
