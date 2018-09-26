@@ -34,8 +34,6 @@ public class Product {
     @Column(length = 1023)
     private String brand;
     
-    // private String description;
-    
     @ManyToMany
     @JoinTable(name = "product_category")
     private List<Category> categories;

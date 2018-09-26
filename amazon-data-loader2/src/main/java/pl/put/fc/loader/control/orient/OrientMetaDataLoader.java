@@ -73,11 +73,6 @@ public class OrientMetaDataLoader extends AbstractMetaDataLoader {
         return 15;
     }
     
-    @Override
-    public boolean isMeta() {
-        return true;
-    }
-    
     private void insertCategoryStack(List<OVertex> categories, CategoryStack stack) {
         ListIterator<String> listIterator = stack.getCategories().listIterator();
         OVertex lastCategory = null;

@@ -69,11 +69,6 @@ public class PostgresMetaDataLoader extends AbstractMetaDataLoader {
         return 1250;
     }
     
-    @Override
-    public boolean isMeta() {
-        return true;
-    }
-    
     private void insertCategoryStack(List<Category> categories, CategoryStack stack) {
         ListIterator<String> listIterator = stack.getCategories().listIterator();
         Category lastCategory = null;

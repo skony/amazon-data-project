@@ -74,9 +74,4 @@ public class OrientReviewDataLoader extends AbstractReviewDataLoader {
     public int getNumberOfInsertsPerRelationTransaction() {
         return Integer.MAX_VALUE;
     }
-    
-    @Override
-    public boolean isMeta() {
-        return false;
-    }
 }

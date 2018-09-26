@@ -15,6 +15,4 @@ public interface DataLoader {
     int getNumberOfInsertsPerEntityTransaction();
     
     int getNumberOfInsertsPerRelationTransaction();
-    
-    boolean isMeta();
 }

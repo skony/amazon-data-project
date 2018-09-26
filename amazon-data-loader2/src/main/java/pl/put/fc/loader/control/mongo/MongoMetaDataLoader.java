@@ -108,9 +108,4 @@ public class MongoMetaDataLoader extends AbstractMetaDataLoader {
             relatedProducts.add(relatedProduct);
         }
     }
-    
-    @Override
-    public boolean isMeta() {
-        return true;
-    }
 }

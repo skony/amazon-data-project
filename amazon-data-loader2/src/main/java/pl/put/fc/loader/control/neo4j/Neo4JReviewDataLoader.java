@@ -56,20 +56,16 @@ public class Neo4JReviewDataLoader extends AbstractReviewDataLoader {
     @Override
     public void endTransaction() {
         session.getTransaction().commit();
+        session.clear();
     }
     
     @Override
     public int getNumberOfInsertsPerEntityTransaction() {
-        return 25;
+        return 400;
     }
     
     @Override
     public int getNumberOfInsertsPerRelationTransaction() {
         return Integer.MAX_VALUE;
-    }
-    
-    @Override
-    public boolean isMeta() {
-        return false;
     }
 }

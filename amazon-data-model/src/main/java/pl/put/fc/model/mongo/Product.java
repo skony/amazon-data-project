@@ -28,8 +28,6 @@ public class Product {
     @JsonProperty
     private String brand;
     
-    // private String description;
-    
     @Reference(idOnly = true)
     private List<Category> categories;
     

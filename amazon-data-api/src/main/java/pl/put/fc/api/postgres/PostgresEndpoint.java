@@ -37,6 +37,15 @@ public class PostgresEndpoint {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/product/{productId}/alsoBought")
+    public List<Product> getProductsAlsoBought(@PathParam("productId") String productId) {
+        return session.createQuery("SELECT ab From Product p JOIN p.alsoBought ab WHERE p.id = :productId")
+                .setParameter("productId", productId)
+                .getResultList();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/product")
     public List<Product> getProducts(@QueryParam("query") String query) {
         return session
@@ -61,7 +70,6 @@ public class PostgresEndpoint {
                     .setParameter("minPrice", minPrice)
                     .setParameter("maxPrice", maxPrice)
                     .setParameterList("categories", categoriesToSearchIn)
-                    .setMaxResults(3)
                     .getResultList();
         }
         return Collections.emptyList();
@@ -84,7 +92,6 @@ public class PostgresEndpoint {
         }
         if (StringUtils.isNotBlank(product)) {
             return session.createQuery("FROM Review r where r.product.id = :product")
-                    .setMaxResults(10)
                     .setParameter("product", product)
                     .getResultList();
         }

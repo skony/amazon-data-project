@@ -21,7 +21,6 @@ import com.mongodb.MongoClient;
 import pl.put.fc.model.mongo.Category;
 import pl.put.fc.model.mongo.Product;
 import pl.put.fc.model.mongo.Review;
-import pl.put.fc.model.mongo.Reviewer;
 
 @Singleton
 @Path("/mongo")
@@ -35,6 +34,13 @@ public class MongoEndpoint {
         morphia.mapPackage("pl.put.fc.model.mongo");
         datastore = morphia.createDatastore(new MongoClient(), "amazondb");
         datastore.ensureIndexes();
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/product/{productId}/alsoBought")
+    public List<Product> getProductsAlsoBought(@PathParam("productId") String productId) {
+        return datastore.get(Product.class, productId).getAlsoBought();
     }
     
     @GET
@@ -73,12 +79,10 @@ public class MongoEndpoint {
             query.and(query.criteria("reviewer.id").equal(user), query.criteria("product.id").equal(product));
         }
         if (StringUtils.isNotBlank(user)) {
-            Reviewer userObj = datastore.get(Reviewer.class, user);
-            return datastore.createQuery(Review.class).field("reviewer").equal(userObj).asList();
+            return datastore.createQuery(Review.class).field("reviewer").equal(user).asList();
         }
         if (StringUtils.isNotBlank(product)) {
-            Product productObj = datastore.get(Product.class, product);
-            return datastore.createQuery(Review.class).field("product").equal(productObj).asList();
+            return datastore.createQuery(Review.class).field("product").equal(product).asList();
         }
         return Collections.emptyList();
     }

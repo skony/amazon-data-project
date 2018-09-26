@@ -39,6 +39,19 @@ public class Neo4jEndpoint {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("/product/{productId}/alsoBought")
+    public List<Product> getProductsAlsoBought(@PathParam("productId") String productId) {
+        Map<String, String> params = new HashMap<>();
+        params.put("productId", productId);
+        Iterable<Map<String, Object>> queryResults = session.query(
+                "MATCH(:Product{uid:$productId})-[:ALSO_BOUGHT]->(product:Product)-[:PRODUCT_CATEGORY]->(category:Category) return product, category",
+                params)
+                .queryResults();
+        return Product.copyFromQuery(queryResults);
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/product")
     public List<Product> getProducts(@QueryParam("query") String query) {
         Map<String, String> params = new HashMap<>();

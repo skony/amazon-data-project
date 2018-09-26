@@ -8,14 +8,16 @@ import pl.put.fc.file.DataFile;
 import pl.put.fc.fixer.MetaFileFixer;
 import pl.put.fc.loader.boundary.DataLoadInvoker;
 import pl.put.fc.loader.control.mongo.MongoDataLoadInvoker;
+import pl.put.fc.loader.control.neo4j.Neo4JDataLoadInvoker;
+import pl.put.fc.loader.control.orient.OrientDataLoadInvoker;
+import pl.put.fc.loader.control.postgres.PostgresDataLoadInvoker;
 
 public class LoaderApplication {
     
     private static final List<DataFile> DATA_FILES = Arrays.asList(DataFile.MUSICAL_INSTRUMENTS);
     private static final List<DataLoadInvoker> DATA_LOAD_INVOKERS =
-            // Arrays.asList(new PostgresDataLoadInvoker(), new MongoDataLoadInvoker(), new OrientDataLoadInvoker(),
-            // new Neo4JDataLoadInvoker());
-            Arrays.asList(new MongoDataLoadInvoker());
+            Arrays.asList(new PostgresDataLoadInvoker(), new MongoDataLoadInvoker(), new OrientDataLoadInvoker(),
+                    new Neo4JDataLoadInvoker());
     
     public static void main(String[] args) throws JsonProcessingException, IOException {
         MetaFileFixer metaFileFixer = new MetaFileFixer();

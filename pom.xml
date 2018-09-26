@@ -12,6 +12,9 @@
     <modules>
         <module>amazon-data-api</module>
         <module>amazon-data-model</module>
+        
+        <module>amazon-data-client</module>
+        
         <module>amazon-data-loader2</module>
     </modules>
     <dependencies>
@@ -38,6 +41,11 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
+            <version>2.27</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
             <version>2.27</version>
         </dependency>
         <dependency>

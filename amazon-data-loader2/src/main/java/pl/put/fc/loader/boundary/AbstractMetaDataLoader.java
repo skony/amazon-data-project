@@ -20,7 +20,6 @@ public abstract class AbstractMetaDataLoader implements DataLoader {
     private static final String BOUGHT_TOGETHER = "bought_together";
     private static final String BUY_AFTER_VIEWING = "buy_after_viewing";
     private static final String BRAND = "brand";
-    private static final String SALES_RANK = "salesRank";
     private static final String CATEGORIES = "categories";
     
     protected MetaDataRow getRow(JsonNode node) {

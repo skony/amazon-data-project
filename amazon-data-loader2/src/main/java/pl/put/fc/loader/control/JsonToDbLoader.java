@@ -18,9 +18,7 @@ public class JsonToDbLoader {
         URL fileURL = getClass().getClassLoader().getResource(fileName);
         long startTime = System.currentTimeMillis();
         loadEntities(dataLoader, objectMapper, fileURL);
-        if (dataLoader.isMeta()) {
-            loadRelations(dataLoader, objectMapper, fileURL);
-        }
+        loadRelations(dataLoader, objectMapper, fileURL);
         System.out.println(dataLoader.getClass().getSimpleName() + ": " + (System.currentTimeMillis() - startTime));
     }
     
@@ -31,10 +29,6 @@ public class JsonToDbLoader {
         final int transactionSize = dataLoader.getNumberOfInsertsPerEntityTransaction();
         dataLoader.beginTransaction();
         while (parser.nextToken() != null) {
-            if (dataLoader.isMeta() && (i > 10000)) {
-                break;
-            }
-            // System.out.println("e " + i);
             JsonNode node = objectMapper.readTree(parser);
             dataLoader.loadEntitiesToDb(node);
             if ((i++ % transactionSize) == 0) {
@@ -52,10 +46,6 @@ public class JsonToDbLoader {
         final int transactionSize = dataLoader.getNumberOfInsertsPerRelationTransaction();
         dataLoader.beginTransaction();
         while (parser.nextToken() != null) {
-            // System.out.println("r " + i);
-            if (i > 10000) {
-                break;
-            }
             JsonNode node = objectMapper.readTree(parser);
             dataLoader.loadRelationsToDb(node);
             if ((i++ % transactionSize) == 0) {
