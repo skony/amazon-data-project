@@ -11,10 +11,10 @@ import pl.put.fc.client.entity.DatabasePath;
 
 public class AlsoBoughtProductsRequester extends AbstractApiRequester {
     
-    private static final List<String> REQUESTED_PRODUCT_IDS = Arrays.asList("1417030321", "B00004XQ83", "B0002E1G5C", "B0002CZW0Y",
-            "B00029MTMQ", "B0002E2KPC", "B0002F7K7Y", "B0002F58TG", "B0002E2XCW", "B0001ARCFA", "B0002D0CEO", "0767851013", "B0002CZSJY",
-            "B0002F7IIK", "B00006I5SB", "B0002CZVXM", "B0002E3CHC", "B0002CZSJO", "B0002DV7ZM", "B0002F7IN0", "B0002E1O2C", "B000068NW5",
-            "B0002F52EW", "B0002D02IU", "B00006LVEU", "B0002D0E8S", "B00009W40D", "B0002CZUUG", "B0002D0B4K", "B0002E2S36");
+    private static final List<String> REQUESTED_PRODUCT_IDS = Arrays.asList("B0002E3L1E", "B0002F6HY6", "B0002E2OSK", "B0002E38WG",
+            "B0002E3L00", "B0002E3L2I", "B0002F779K", "B0002E2QCY", "B0002F77PE", "B0002E3L0K", "B0002E2OTE", "B0002E2UCA", "B0002E38WQ",
+            "B0002E3KY2", "B0002CZW8G", "B0002E38W6", "B0002F778G", "B0002E3L0U", "B0002E54FK", "B0002F778Q", "B0002CZWKO", "B0002F7790",
+            "B0002E2OV2", "B0002F77AO", "B0002F742A", "B0002F7JTI", "B0002E38X0", "B0002E2OSU", "B0002E2QUQ", "B0002F73ZI");
     
     public Map<String, Integer> runRequesting(WebTarget baseTarget) {
         Map<String, Integer> map = new HashMap<>();
@@ -27,7 +27,7 @@ public class AlsoBoughtProductsRequester extends AbstractApiRequester {
         map.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         });
-        return null;
+        return map;
     }
     
     private int request(WebTarget target) {

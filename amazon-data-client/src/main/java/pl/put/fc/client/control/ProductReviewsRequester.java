@@ -27,7 +27,7 @@ public class ProductReviewsRequester extends AbstractApiRequester {
         map.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         });
-        return null;
+        return map;
     }
     
     private int request(WebTarget target) {
